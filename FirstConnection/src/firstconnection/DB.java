@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -150,7 +153,36 @@ public class DB {
         } catch (SQLException ex) {
               System.out.println("Valami baj van a user kiolvasásakor");
               System.out.println("" + ex);
+        }        
+    }
+    
+    public ArrayList<User> getAllUsers(){
+        String sql = "select * from users";
+        ArrayList<User> users = null;
+        try {
+            ResultSet rs = createStatement.executeQuery(sql);
+            users = new ArrayList<User>();
+             while (rs.next()) {
+                 User user = new User(rs.getString("name"), rs.getString("address"));
+                 users.add(user);
+             }
+        } catch (SQLException ex) {
+              System.out.println("Valami baj van a user kiolvasásakor");
+              System.out.println("" + ex);
         }
-        
+        return users;
+    }
+    
+    public void addUser(User user){
+         try {
+            String sql = "insert into  users values(?,?)";
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setString(1, user.getName());
+            pstm.setString(2, user.getAddress());
+            pstm.execute();
+        } catch (SQLException ex) {
+            System.out.println("Valami baj van a user hozzáadásakor");
+            System.out.println("" + ex);
+        }
     }
 }
