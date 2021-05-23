@@ -17,16 +17,10 @@ import java.util.logging.Logger;
 
 public class DB {
 
-    /*Library-hez plusz önyvtár adása - jelen esetben szükségünk lesz a driver-re
-      Libraries -> jobb egérgomb -> Add Library -> Java DB Driver (kellhet a GlassFish Srever:
-      Tools->Servers)
-     */
-    final String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver"; //ez a derbyhez szükséges driver
-    //nincsen server a gépen, és sehol ebben a példában, így belső útvonalat adunk meg
-    //sampleDB -> adatbázis neve
-    //create true -> ha nincs még ilyen létrehozza
+  
+    final String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver"; 
+   
     final String URL = "jdbc:derby:sampleDB;create=true";
-    //Belső adatbázisunk lesz, így ez nem feltétlenül kell
     //final String USERNAME = "";
     //final String PASSWORD = "";
     private Connection conn = null;
@@ -43,11 +37,6 @@ public class DB {
             System.out.println("Valami baj van a connection létrehozásakor.");
             System.out.println("" + ex);
         }
-
-        /*Statement: ezzel mondjuk meg, hogy adatot küldünk vagy kérünk
-       Kétféle adatot nyerhetünk ki:
-            - metaadatok: az adatbázisról adnak információt pl hány adattábla van
-            - konkrét adatok*/
         //Ez a teherautó a hídon
         if (conn != null) {
             try {
@@ -57,8 +46,6 @@ public class DB {
                 System.out.println("" + ex);
             }
         }
-        
-        //Üres e az adatbázis? (Első futtatáskor)
         //Lekérjük az adatbázis metaadatait        
         try {
             dbmd = conn.getMetaData();
@@ -67,15 +54,12 @@ public class DB {
             System.out.println("" + ex);
         }
         
-        //Az adatbázis információk ebben a resultsetben jönnek vissza, táblázatszerűen tárolja
-        //az adatokat.
         /*Shema: APP
           Adattábla neve: USERS
          */
         //megnézzük, hogy adott tábla létezik-e az adatbázisban, ha nem létrehozzuk
         try {
             ResultSet rs = dbmd.getTables(null, "APP", "USERS", null);
-            //ha rs1-nek van következő értéke: rs.next()
             if (!rs.next()) {
                 createStatement.execute("create table users(name varchar(20), address varchar(20))");
             }
@@ -85,16 +69,6 @@ public class DB {
         }      
     }
     
-    
-    /*típusok: 
-        - alap/sima: Statement (A változathoz): meghívható sql string nélkül
-        - PreparedStatement (B változathoz): egyből kell sql string a meghívásánál 
-            Ez ellenőrzi a paramétereket, hogy tényleg az van benne amilyen típus kell
-            Gyorsabb lekérdezések
-        - speciális: adatbázis függvények meghívásáért felelős (ezek a függvények akkor jók, ha pl többféle platformra írunk egy
-            programot, többféle programnyelven, ami ugyanazt az adatbázist használja, akkor nem kell minden nyelven megírni a leérdezést, hanem 
-            megcsinálhatjuk adatbázis függvényként és mindegyikben csak meghívjuk).
-    */
     public void addUser(String name, String address){
         try {
             //createStatement.execute("insert into  users values('test1' , 'Budapest'), ('test2', 'Budapest')");
@@ -102,11 +76,9 @@ public class DB {
             //String sql = "insert into  users values('" + name + "','" + address + "')";
             //createStatement.execute(sql);
             //B változat
-            //Itt az sql Stringbe nem írhatok özvetlenül paramétert
             String sql = "insert into  users values(?,?)";
             PreparedStatement pstm = conn.prepareStatement(sql);
             //pstm.setInt() -> ha szám stb.
-            //itt 1-től indul a számozás
             pstm.setString(1, name);
             pstm.setString(2, address);
             pstm.execute();
