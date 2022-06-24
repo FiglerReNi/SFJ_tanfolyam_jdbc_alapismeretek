@@ -17,6 +17,12 @@ import java.util.logging.Logger;
 
 public class DB {
 
+    /* beágyazott (embedded) driver - org.apache.derby.jdbc.EmbeddedDriver
+  	   belső elérési út, mint url - jdbc:derby:sampleDB;create=true
+  	    sampleDB -> adatbázis neve
+  	    create true -> ha nincs még ilyen létrehozza
+  	    User/Password nem kell
+  	*/
   
     final String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver"; 
    

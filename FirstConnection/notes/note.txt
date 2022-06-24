@@ -1,0 +1,56 @@
+Adatbázis típusok és eszközök:
+  	• Mysql
+  	• postgreSql
+  	• Oracle
+  	• mariaDB
+  	• derby:
+  		Ez a java beépített adatbázisa, így bármikor használható , nem kell hozzá internet kapcsolat, semmi. A futtatható fájl mellet kell lennie (.jar mellett), és akár egy pendrive-on átadható.
+
+  	Derby:
+  		○ telepíteni kell:
+  			Library-hez plusz könyvtár adása - jelen esetben szükségünk lesz a driver-re:
+  			      Libraries -> jobb egérgomb -> Add Library -> Java DB Driver
+  				 (kellhet a GlassFish Server, hogy működjön: Tools->Servers)
+    A kész projekt mellett kell lennie a létrejövő adatbázisnak a gyökérkönyvtárban.
+
+JDBC:
+  	Kapcsolat a kód és az adatbázis között.
+  	Sql utasításokkal
+  	Mindegy milyen adatbázis típushoz kell kapcsolódni
+  	Egy API tulajdonképpen.
+  	JDK-ba be van építve.
+    Meg kell mondanunk, hogy milyen  adatbázis környezettel fogjuk használni.
+    Különböző driverek vannak a különböző adatbázisokhoz.
+
+    Kapcsolat létrehozása:
+      JDBC connection osztály segítségével, amiből egy objektum készíthető.
+       		     Szükség van:
+      				□ elérési cím
+      				□ port
+      				□ adatbázis neve
+      				□ Felhasználói név
+      				□ Jelszó
+      Driver (konnetor) -> ez mondja meg milyen fajta adatbázishoz kapcsolódunk.
+
+    createStatement():
+      Ezzel mondjuk meg, hogy adatot küldünk vagy kérünk az adatbázistól
+      Kétféle adatot nyerhetünk ki:
+        ○ metaadatok: az adatbázisról adnak információt pl hány adattábla van
+        ○ konkrét adatok
+      Írhatunk az sql stringbe közvetlenül értékeket is.
+
+    preparedStatement():
+        ○ Itt az sql Stringbe nem írhatok közvetlenül paramétert
+        ○ A paramétereket számozzuk, ezek számozása egytől indul, nem nullától mint a tömbök
+        ○  Ez ellenőrzi a paramétereket, hogy tényleg az van benne amilyen típus kell
+        ○  Gyorsabb lekérdezések
+        ○ A meghívásakor egyből át kell adnom neki az sql-t, csak okkal hívható meg, üresen nem
+
+    adatbázis függvényeket is képes meghívni CallableStatement():
+      Ezek a függvények akkor jók, ha pl többféle platformra írunk egy programot, többféle programnyelven, ami ugyanazt az adatbázist használja, akkor nem kell minden nyelven megírni a leérdezést, hanem megcsinálhatjuk adatbázis függvényként és mindegyikben csak meghívjuk.
+
+    ResultSet:
+      Ebben tároljuk az adatbázisból visszaérkező adatokat, táblázat szerűen tárol.
+
+    .next():
+    Ezzel nézzük meg, hogy egy resultSet-nek van e követező eleme.
